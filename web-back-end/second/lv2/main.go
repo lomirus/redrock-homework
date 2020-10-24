@@ -10,11 +10,11 @@ func Receiver(v interface{}) {
 	case string:
 		fmt.Println("string")
 	case bool:
-		fmt.Println("int")
+		fmt.Println("bool")
 	case float32:
-		fmt.Println("int32")
+		fmt.Println("float32")
 	case float64:
-		fmt.Println("int64")
+		fmt.Println("float64")
 	case int:
 		fmt.Println("int")
 	case int8:
@@ -29,5 +29,5 @@ func Receiver(v interface{}) {
 }
 
 func main() {
-	Receiver("asd")
+	Receiver(true)
 }
