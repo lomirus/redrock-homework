@@ -1,0 +1,1 @@
+const add = (...values) => values.reduce((prev, v) => prev + v)
