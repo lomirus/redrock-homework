@@ -55,7 +55,7 @@ func main(){
 			switch status {
 			case 0:c.String(http.StatusBadRequest, "The username does not exist.")
 			case 1:c.String(http.StatusBadRequest, "Wrong password.")
-			case 2:c.String(http.StatusOK, "Registered successfully.")
+			case 2:c.String(http.StatusOK, "Login successful.")
 			}
 		} else {
 			c.String(http.StatusBadRequest, err.Error())
