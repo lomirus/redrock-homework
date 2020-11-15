@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>  
+</head>
+
+<body>
+    <ol id="list">
+        <li>星星学姐</li>
+        <li>鑫鑫学姐</li>
+        <li>欣欣学姐</li>
+        <li>峰峰学姐</li>
+        <li>华尹学姐</li>
+        <li>峰峰学姐</li>
+        <li>毛神毛神</li>
+        <li>翔哥翔哥</li>
+    </ol>
+    <script>
+        const lists = document.querySelectorAll('li')
+        lists.forEach(function(v, i){
+            if( i % 2 === 0)
+                lists[i].style.color = 'green'
+            else
+                lists[i].style.color = 'red'
+        })
+        document.querySelector("#list").addEventListener('click', function(e){
+            if(e.target.nodeName === "LI")
+                console.log(e.target.innerText)
+        })
+    </script>
+</body>
+
+</html>

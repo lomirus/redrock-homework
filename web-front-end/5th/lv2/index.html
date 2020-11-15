@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function changebgc(color){
+            document.body.style.backgroundColor = color
+        }
+        function changefs(size){
+            document.querySelector('p').style.fontSize = size
+        }
+    </script>
+</head>
+
+<body>
+    <div>
+        <button onclick="changebgc('red')">Change Theme Color</button>
+        <button onclick="changebgc('green')">Change Theme Color</button>
+        <button onclick="changebgc('blue')">Change Theme Color</button>
+    </div>
+    <div>
+        <button onclick="changefs('20px')">Change Font Size</button>
+        <button onclick="changefs('40px')">Change Font Size</button>
+        <button onclick="changefs('60px')">Change Font Size</button>
+    </div>
+    <p>xxjjwasaikoudesu!</p>
+</body>
+
+</html>
