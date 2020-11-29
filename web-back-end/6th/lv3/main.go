@@ -123,7 +123,7 @@ func onLogin(user User){
 		fmt.Println("Input 1 to edit your username;")
 		fmt.Println("Input 2 to edit your password;")
 		fmt.Println("Input 3 to edit your bio;")
-		fmt.Println("Input 4 to go back;")
+		fmt.Println("Input 4 to log out;")
 		fmt.Scan(&input)
 		if input == "1" {
 			var newUsername string
@@ -184,6 +184,7 @@ func onLogin(user User){
 			}
 			fmt.Println("Info: Updated Bio Successfully")
 		} else if input == "4" {
+		fmt.Println("Info: Logged out Successfully")
 			return
 		} else {
 			fmt.Println("Error: Unexpected Input")
