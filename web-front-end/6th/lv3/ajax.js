@@ -1,10 +1,10 @@
 class Ajax {
     constructor({ data = null, header = {}, success = () => { }, failure = () => { }, async = true } = {}) {
-        Ajax.header = header
-        Ajax.data = data
-        Ajax.success = success
-        Ajax.failure = failure
-        Ajax.async = async
+        this.header = header
+        this.data = data
+        this.success = success
+        this.failure = failure
+        this.async = async
     }
     get(url, { async, data, header, success, failure } = {}) {
         this.#default('get', url, { async, data, header, success, failure })
@@ -14,14 +14,14 @@ class Ajax {
     }
     #default(method, url, {
         header = {},
-        async = Ajax.async,
-        data = Ajax.data, 
-        success = Ajax.success,
-        failure = Ajax.failure 
+        async = this.async,
+        data = this.data, 
+        success = this.success,
+        failure = this.failure 
     }) {
         const newxhr = new XMLHttpRequest
-        for (i in Ajax.header)
-            newxhr.setRequestHeader(i, header[i])
+        for (i in this.header)
+            newxhr.setRequestHeader(i, this.header[i])
         for (i in header)
             newxhr.setRequestHeader(i, header[i])
         newxhr.onreadystatechange = function () {
