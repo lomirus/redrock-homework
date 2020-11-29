@@ -10,8 +10,9 @@ function search(keywords) {
     ajax({
         method: 'GET',
         url: `http://musicapi.leanapp.cn/search?keywords=${keywords}`,
-        async: true
-    }, updateGrid)
+        async: true,
+        handleRes: updateGrid
+    })
 }
 
 function createHeader() {
@@ -47,7 +48,7 @@ function createLines(json) {
         createNewLine(parseInt(i) + 1, songs[i].name, songs[i].artists, songs[i].album.name)
 }
 
-function ajax({ method, url, data, async }, handleRes) {
+function ajax({ method, url, data, async, handleRes }) {
     const xhr = new XMLHttpRequest()
     xhr.withCredentials = true
     xhr.addEventListener('readystatechange', function () {
