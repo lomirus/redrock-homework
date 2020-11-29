@@ -66,7 +66,8 @@ func login(db *sql.DB){
 		row := db.QueryRow(fmt.Sprintf("select id, username, password, bio from `users` where `username` = '%s'", username))
 		err := row.Scan(&user.Id, &user.Username, &user.Password, &user.Bio)
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println("Error: Nonexistent Username")
+			return
 		}
 		if password != user.Password{
 			fmt.Println("Error: Wrong Password")
