@@ -22,3 +22,10 @@ func Register(username string, password string) error {
 	}
 	return nil
 }
+func Verify(username string, password string) (dao.User, error) {
+	user, err := dao.GetUser(username, password)
+	if err != nil {
+		return user, err
+	}
+	return user, err
+}

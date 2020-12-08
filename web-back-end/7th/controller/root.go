@@ -57,10 +57,10 @@ func Login(c *gin.Context) {
 		c.SetCookie("password", user.Password, 3600, "/", "localhost", false, true)
 		c.SetCookie("id", fmt.Sprintf("%d", user.Id), 3600, "/", "localhost", false, true)
 		c.SetCookie("bio", user.Bio, 3600, "/", "localhost", false, true)
-		c.String(http.StatusOK, "Login Successfully")
+		c.String(http.StatusOK, "Logged in Successfully")
 	} else {
 		c.JSON(http.StatusOK, gin.H{
-			"Error": err,
+			"Error": err.Error(),
 		})
 	}
 }
@@ -70,11 +70,11 @@ func Register(c *gin.Context) {
 	err := service.Register(username, password)
 	if err == nil {
 		c.JSON(http.StatusOK, gin.H{
-			"Info": "Registration Successful",
+			"Info": "Registered Successfully",
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H{
-			"Error": err,
+			"Error": err.Error(),
 		})
 	}
 }
@@ -84,4 +84,34 @@ func Logout(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"Info": "Logged out Successfully",
 	})
+}
+func Verify() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		username, err := c.Cookie("username")
+		if err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"Error": "not logged in",
+			})
+			c.Abort()
+			return
+		}
+		password, err := c.Cookie("password")
+		if err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"Error": "not logged in",
+			})
+			c.Abort()
+			return
+		}
+		user, err := service.Verify(username, password)
+		if err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"Error": err.Error(),
+			})
+			c.Abort()
+			return
+		}
+		c.Set("userId", user.Id)
+		c.Next()
+	}
 }

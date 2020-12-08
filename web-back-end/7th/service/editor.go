@@ -5,8 +5,8 @@ import (
 	"messageBoard/dao"
 )
 
-func EditUsername(username string, password string, newUsername string) error {
-	user, err := dao.GetUser(username, password)
+func EditUsername(userId int, newUsername string) error {
+	user, err := dao.GetUserById(userId)
 	if err != nil {
 		return err
 	}
@@ -22,8 +22,8 @@ func EditUsername(username string, password string, newUsername string) error {
 	}
 	return nil
 }
-func EditPassword(username string, password string, newPassword string) error {
-	user, err := dao.GetUser(username, password)
+func EditPassword(userId int, newPassword string) error {
+	user, err := dao.GetUserById(userId)
 	if err != nil {
 		return err
 	}
@@ -36,8 +36,8 @@ func EditPassword(username string, password string, newPassword string) error {
 	}
 	return nil
 }
-func EditBio(username string, password string, newBio string) error {
-	user, err := dao.GetUser(username, password)
+func EditBio(userId int, newBio string) error {
+	user, err := dao.GetUserById(userId)
 	if err != nil {
 		return err
 	}

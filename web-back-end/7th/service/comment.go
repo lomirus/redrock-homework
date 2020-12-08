@@ -15,18 +15,25 @@ func ShowComments() []dao.Comment {
 	}
 	return comments
 }
-func AddComment(value string, userId string) error {
+func AddComment(value string, userId int) error {
 	err := dao.AddComment(value, userId)
 	if err != nil {
 		return err
 	}
 	return nil
 }
-func ReplyComment(target string, value string, userId string) error {
+func ReplyComment(target string, value string, userId int) error {
 	if !dao.IsCommentExistent(target) {
 		return errors.New("nonexistent target id")
 	}
 	err := dao.ReplyComment(target, value, userId)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func LikeComment(target string) error {
+	err := dao.LikeComment(target)
 	if err != nil {
 		return err
 	}

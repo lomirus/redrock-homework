@@ -7,26 +7,24 @@ import (
 )
 
 func EditUsername(c *gin.Context) {
-	username, _ := c.Cookie("username")
-	password, _ := c.Cookie("password")
+	userId := c.GetInt("userId")
 	newUsername := c.Query("new")
-	err := service.EditUsername(username, password, newUsername)
-	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"Error": err,
-		})
-	} else {
+	err := service.EditUsername(userId, newUsername)
+	if err == nil {
 		c.SetCookie("username", newUsername, 3600, "/", "localhost", false, true)
 		c.JSON(http.StatusOK, gin.H{
 			"Info": "Updated Username Successfully",
 		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"Error": err.Error(),
+		})
 	}
 }
 func EditPassword(c *gin.Context) {
-	username, _ := c.Cookie("username")
-	password, _ := c.Cookie("password")
+	userId := c.GetInt("userId")
 	newPassword := c.Query("new")
-	err := service.EditPassword(username, password, newPassword)
+	err := service.EditPassword(userId, newPassword)
 	if err == nil {
 		c.SetCookie("password", newPassword, 3600, "/", "localhost", false, true)
 		c.JSON(http.StatusOK, gin.H{
@@ -34,16 +32,14 @@ func EditPassword(c *gin.Context) {
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H{
-			"Warning": err,
+			"Warning": err.Error(),
 		})
 	}
-
 }
 func EditBio(c *gin.Context) {
-	username, _ := c.Cookie("username")
-	password, _ := c.Cookie("password")
+	userId := c.GetInt("userId")
 	newBio := c.Query("new")
-	err := service.EditBio(username, password, newBio)
+	err := service.EditBio(userId, newBio)
 	if err == nil {
 		c.SetCookie("bio", newBio, 3600, "/", "localhost", false, true)
 		c.JSON(http.StatusOK, gin.H{
@@ -51,7 +47,7 @@ func EditBio(c *gin.Context) {
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H{
-			"Error": err,
+			"Error": err.Error(),
 		})
 	}
 }

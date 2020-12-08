@@ -15,14 +15,15 @@ func main() {
 	router.GET("/logout", controller.Logout)
 
 	editGroup := router.Group("edit")
-	editGroup.GET("/username", controller.EditUsername)
-	editGroup.GET("/password", controller.EditPassword)
-	editGroup.GET("/bio", controller.EditBio)
+	editGroup.GET("/username", controller.Verify(), controller.EditUsername)
+	editGroup.GET("/password", controller.Verify(), controller.EditPassword)
+	editGroup.GET("/bio", controller.Verify(), controller.EditBio)
 
 	commentGroup := router.Group("comment")
 	commentGroup.GET("/show", controller.ShowComments)
-	commentGroup.GET("/add", controller.AddComment)
-	commentGroup.GET("/reply", controller.ReplyComment)
+	commentGroup.GET("/add", controller.Verify(), controller.AddComment)
+	commentGroup.GET("/reply", controller.Verify(), controller.ReplyComment)
+	commentGroup.GET("/like", controller.Verify(), controller.LikeComment)
 
 	err := router.Run()
 	if err != nil {

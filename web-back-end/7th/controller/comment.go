@@ -12,10 +12,10 @@ func ShowComments(c *gin.Context) {
 }
 func AddComment(c *gin.Context) {
 	value := c.Query("value")
-	userId, _ := c.Cookie("id")
+	userId := c.GetInt("userId")
 	if value == "" {
 		c.JSON(http.StatusOK, gin.H{
-			"Error": "Invalid Comment Value",
+			"Error": "no value provided",
 		})
 		return
 	}
@@ -26,18 +26,17 @@ func AddComment(c *gin.Context) {
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H{
-			"Error": err,
+			"Error": err.Error(),
 		})
 	}
-
 }
 func ReplyComment(c *gin.Context) {
 	target := c.Query("target")
 	value := c.Query("value")
-	userId, _ := c.Cookie("id")
+	userId := c.GetInt("userId")
 	if value == "" {
 		c.JSON(http.StatusOK, gin.H{
-			"Error": "Invalid Reply Value",
+			"Error": "no value provided",
 		})
 		return
 	}
@@ -48,7 +47,26 @@ func ReplyComment(c *gin.Context) {
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H{
-			"Error": err,
+			"Error": err.Error(),
 		})
 	}
+}
+func LikeComment(c *gin.Context) {
+	target := c.Query("target")
+	if target == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"Error": "no target provided",
+		})
+		return
+	}
+	err := service.LikeComment(target)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"Error": err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"Info": "to like successfully",
+	})
 }
