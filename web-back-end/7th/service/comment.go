@@ -29,7 +29,8 @@ func AppendChildrenComment(comment *dao.Comment, userId string) error {
 	for _, childId := range childrenId {
 		child, err := dao.GetCommentById(childId)
 		if err != nil {
-			return err
+			comment.Children = append(comment.Children, nil)
+			return nil
 		}
 		// 判断子节点是否在用户查看范围内
 		if child.SecretTarget == -1 || strconv.Itoa(child.SecretTarget) == userId {
@@ -64,6 +65,31 @@ func ReplyComment(target string, value string, userId int) error {
 }
 func LikeComment(target string) error {
 	err := dao.LikeComment(target)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func DeleteComment(target string) error {
+	comment, err := dao.GetCommentById(target)
+	if err != nil {
+		return nil // 查找不到 ID 说明该评论已被删除，所以返回 nil
+	}
+	if comment.ChildrenId != "" {
+		childrenId := strings.Split(comment.ChildrenId, ",")
+		for _, childId := range childrenId {
+			err = DeleteComment(childId)
+			if err != nil {
+				return err
+			}
+			err = dao.DeleteComment(childId)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	err = dao.DeleteComment(target)
 	if err != nil {
 		return err
 	}

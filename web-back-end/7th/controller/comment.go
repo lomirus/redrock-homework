@@ -116,6 +116,47 @@ func LikeComment(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"Info": "to like successfully",
+		"Info": "liked successfully",
 	})
+}
+func DeleteComment(c *gin.Context) {
+	target := c.Query("target")
+	userId := c.GetInt("userId")
+	if target == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"Error": "no target provided",
+		})
+		return
+	}
+	comment, err := dao.GetCommentById(target)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"Error": err,
+		})
+		return
+	}
+	user, err := dao.GetUserById(userId)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"Error": err,
+		})
+		return
+	}
+	if comment.UserId != user.Id {
+		c.JSON(http.StatusOK, gin.H{
+			"Error": "the user does not match the comment",
+		})
+		return
+	}
+	err = service.DeleteComment(target)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"Error": err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"Info": "deleted successfully",
+	})
+
 }

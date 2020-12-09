@@ -24,6 +24,7 @@ func main() {
 	commentGroup.GET("/add", controller.Verify(), controller.AddComment)
 	commentGroup.GET("/reply", controller.Verify(), controller.ReplyComment)
 	commentGroup.GET("/like", controller.Verify(), controller.LikeComment)
+	commentGroup.GET("/delete", controller.Verify(), controller.DeleteComment)
 
 	err := router.Run()
 	if err != nil {

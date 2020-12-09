@@ -88,7 +88,7 @@ func GetUser(username string, password string) (user User, err error) {
 	return user, nil
 }
 func GetUserById(userId int) (user User, err error) {
-	row := db.QueryRow(fmt.Sprintf("select id, username, password, bio from `users` where `id` = '%s'", userId))
+	row := db.QueryRow(fmt.Sprintf("select id, username, password, bio from `users` where `id` = '%d'", userId))
 	rowErr := row.Scan(&user.Id, &user.Username, &user.Password, &user.Bio)
 	if rowErr != nil {
 		err = errors.New("the id of user does not exist")

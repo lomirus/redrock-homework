@@ -101,3 +101,10 @@ func LikeComment(target string) error {
 	}
 	return nil
 }
+func DeleteComment(target string) error {
+	_, err := db.Exec("DELETE FROM `comments` WHERE `id`=?", target)
+	if err != nil {
+		return err
+	}
+	return nil
+}
