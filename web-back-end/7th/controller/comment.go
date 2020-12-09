@@ -18,7 +18,13 @@ func ShowComments(c *gin.Context) {
 }
 func AddComment(c *gin.Context) {
 	value := c.Query("value")
-	userId := c.GetInt("userId")
+	anonymous := c.Query("anonymous")
+	var userId int
+	if anonymous == "true" {
+		userId = -1
+	} else {
+		userId = c.GetInt("userId")
+	}
 	if value == "" {
 		c.JSON(http.StatusOK, gin.H{
 			"Error": "no value provided",
@@ -39,7 +45,13 @@ func AddComment(c *gin.Context) {
 func ReplyComment(c *gin.Context) {
 	target := c.Query("target")
 	value := c.Query("value")
-	userId := c.GetInt("userId")
+	anonymous := c.Query("anonymous")
+	var userId int
+	if anonymous == "true" {
+		userId = -1
+	} else {
+		userId = c.GetInt("userId")
+	}
 	if value == "" {
 		c.JSON(http.StatusOK, gin.H{
 			"Error": "no value provided",

@@ -21,7 +21,6 @@ type Comment struct {
 	UserId     int    `json:"user_id"`
 	Value      string `json:"value"`
 	Likes      int    `json:"likes"`
-	Parent     *Comment
 	Children   []*Comment
 }
 
