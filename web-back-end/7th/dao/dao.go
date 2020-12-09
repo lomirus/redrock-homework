@@ -15,11 +15,14 @@ type User struct {
 	Bio      string `json:"bio"`
 }
 type Comment struct {
-	Id       int    `json:"id"`
-	UserId   int    `json:"user_id"`
-	ParentId int    `json:"parent_id"`
-	Value    string `json:"value"`
-	Likes    int    `json:"likes"`
+	Id         int    `json:"id"`
+	ParentId   int    `json:"parent_id"`
+	ChildrenId string `json:"children_id"`
+	UserId     int    `json:"user_id"`
+	Value      string `json:"value"`
+	Likes      int    `json:"likes"`
+	Parent     *Comment
+	Children   []*Comment
 }
 
 var db *sql.DB
@@ -37,17 +40,18 @@ func init() {
 		"bio VARCHAR(128) DEFAULT ''" +
 		") ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Creating users Table: ", err)
 	}
 	_, err = db.Exec("CREATE TABLE IF NOT EXISTS `comments`(" +
 		"id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
 		"user_id BIGINT NOT NULL," +
 		"parent_id BIGINT NOT NULL DEFAULT -1," +
+		"children_id VARCHAR(1024) NOT NULL DEFAULT ''," +
 		"value VARCHAR(256) NOT NULL DEFAULT ''," +
 		"likes BIGINT NOT NULL DEFAULT 0" +
 		") ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Creating comments Table: ", err)
 	}
 }
 

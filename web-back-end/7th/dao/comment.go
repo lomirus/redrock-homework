@@ -2,34 +2,37 @@ package dao
 
 import (
 	"fmt"
-	"log"
+	"strconv"
 )
 
-func GetComments() []Comment {
+func GetComments() ([]Comment, error) {
 	var comments []Comment
-	query, err := db.Query("SELECT `id`, `user_id`,`parent_id`, `value`, `likes` FROM `comments`")
+	query, err := db.Query("SELECT `id`, `user_id`,`parent_id`,`children_id`, `value`, `likes`" +
+		" FROM `comments` WHERE parent_id=-1")
 	if err != nil {
-		log.Fatal(err)
+		return comments, err
 	}
 	for query.Next() {
 		var newComment Comment
-		query.Scan(&newComment.Id, &newComment.UserId, &newComment.ParentId,
+		err := query.Scan(&newComment.Id, &newComment.UserId, &newComment.ParentId, &newComment.ChildrenId,
 			&newComment.Value, &newComment.Likes)
+		if err != nil {
+			return comments, err
+		}
 		comments = append(comments, newComment)
 	}
-	return comments
+	return comments, nil
 }
-func GetParentComment(comment Comment) string {
-	var parentComment Comment
-	row := db.QueryRow(fmt.Sprintf("select `id`,`user_id`,`parent_id`,`value` from `comments` where `id` = '%d'", comment.ParentId))
-	err := row.Scan(&parentComment.Id, &parentComment.UserId, &parentComment.ParentId, &parentComment.Value)
+func GetCommentById(id string) (Comment, error) {
+	var comment Comment
+	row := db.QueryRow("SELECT `id`, `user_id`,`parent_id`,`children_id`, `value`, `likes`"+
+		" FROM `comments` WHERE id=?", id)
+	err := row.Scan(&comment.Id, &comment.UserId, &comment.ParentId, &comment.ChildrenId,
+		&comment.Value, &comment.Likes)
 	if err != nil {
-		log.Fatal(err)
+		return comment, err
 	}
-	if parentComment.ParentId != -1 {
-		parentComment.Value = fmt.Sprintf("%s -> %s", parentComment.Value, GetParentComment(parentComment))
-	}
-	return parentComment.Value
+	return comment, nil
 }
 
 func AddComment(value string, userId int) error {
@@ -40,8 +43,31 @@ func AddComment(value string, userId int) error {
 	return nil
 }
 func ReplyComment(target string, value string, userId int) error {
-	_, err := db.Exec("INSERT INTO `comments` (`value`, `parent_id`, `user_id`) VALUES (?,?,?)",
+	// 插入回复
+	reply, err := db.Exec("INSERT INTO `comments` (`value`, `parent_id`, `user_id`) VALUES (?,?,?)",
 		value, target, userId)
+	if err != nil {
+		return err
+	}
+	lastInsertId, err := reply.LastInsertId()
+	if err != nil {
+		return err
+	}
+	// 获取父元素的子节点ID
+	var childrenId string
+	row := db.QueryRow("SELECT `children_id` FROM `comments` WHERE `id`=?", target)
+	err = row.Scan(&childrenId)
+	if err != nil {
+		return err
+	}
+	// 更新子节点ID
+	if childrenId == "" {
+		childrenId += strconv.FormatInt(lastInsertId, 10)
+	} else {
+		childrenId += fmt.Sprintf("%s%d", ",", lastInsertId)
+	}
+	// 更新父元素的子节点ID
+	_, err = db.Exec("UPDATE `comments` SET `children_id`=? WHERE `id`=?", childrenId, target)
 	if err != nil {
 		return err
 	}

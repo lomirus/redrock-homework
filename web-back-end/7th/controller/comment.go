@@ -7,7 +7,13 @@ import (
 )
 
 func ShowComments(c *gin.Context) {
-	comments := service.ShowComments()
+	comments, err := service.GetComments()
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, comments)
 }
 func AddComment(c *gin.Context) {
