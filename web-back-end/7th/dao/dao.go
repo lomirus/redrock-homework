@@ -15,13 +15,14 @@ type User struct {
 	Bio      string `json:"bio"`
 }
 type Comment struct {
-	Id         int    `json:"id"`
-	ParentId   int    `json:"parent_id"`
-	ChildrenId string `json:"children_id"`
-	UserId     int    `json:"user_id"`
-	Value      string `json:"value"`
-	Likes      int    `json:"likes"`
-	Children   []*Comment
+	Id           int    `json:"id"`
+	ParentId     int    `json:"parent_id"`
+	ChildrenId   string `json:"children_id"`
+	UserId       int    `json:"user_id"`
+	SecretTarget int    `json:"secret_target"`
+	Value        string `json:"value"`
+	Likes        int    `json:"likes"`
+	Children     []*Comment
 }
 
 var db *sql.DB
@@ -46,6 +47,7 @@ func init() {
 		"user_id BIGINT NOT NULL," +
 		"parent_id BIGINT NOT NULL DEFAULT -1," +
 		"children_id VARCHAR(1024) NOT NULL DEFAULT ''," +
+		"secret_target BIGINT NOT NULL DEFAULT -1," +
 		"value VARCHAR(256) NOT NULL DEFAULT ''," +
 		"likes BIGINT NOT NULL DEFAULT 0" +
 		") ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;")

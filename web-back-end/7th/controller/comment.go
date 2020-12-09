@@ -2,12 +2,42 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"messageBoard/dao"
 	"messageBoard/service"
 	"net/http"
+	"strconv"
 )
 
+// Reply 被设置为全部用户可见
+//（不然如果可以随便设置可见用户的话，感觉会造成逻辑上的混乱
+//  比如小明回复小红，却设置为小红不可见，就很离谱；
+//  或者小明发了一条评论，设为小红不可见，而小美回复了小明的这条评论，并设置回复为小红可见，也很离谱）
 func ShowComments(c *gin.Context) {
-	comments, err := service.GetComments()
+	visitorComments, err := service.GetComments("")
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	username, err := c.Cookie("username")
+	if err != nil {
+		c.JSON(http.StatusOK, visitorComments)
+		return
+	}
+	password, err := c.Cookie("password")
+	if err != nil {
+		c.JSON(http.StatusOK, visitorComments)
+		return
+	}
+	user, err := dao.GetUser(username, password)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	comments, err := service.GetComments(strconv.Itoa(user.Id))
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"error": err.Error(),
@@ -18,6 +48,7 @@ func ShowComments(c *gin.Context) {
 }
 func AddComment(c *gin.Context) {
 	value := c.Query("value")
+	secretTarget := c.Query("secret_target")
 	anonymous := c.Query("anonymous")
 	var userId int
 	if anonymous == "true" {
@@ -31,7 +62,7 @@ func AddComment(c *gin.Context) {
 		})
 		return
 	}
-	err := service.AddComment(value, userId)
+	err := service.AddComment(value, userId, secretTarget)
 	if err == nil {
 		c.JSON(http.StatusOK, gin.H{
 			"Info": "Commented Successfully",
