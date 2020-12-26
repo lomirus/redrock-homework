@@ -65,3 +65,8 @@
 ## `/help`
 
 查询帮助，无参数要求
+
+## 引用代码
+
+* 前端生成二维码：https://github.com/davidshimjs/qrcodejs
+
