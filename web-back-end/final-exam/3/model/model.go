@@ -119,8 +119,16 @@ func Transfer(self User, target User, money int, remark string) (err error) {
 	}
 	return nil
 }
-func GetLogs(username string) (logs []Log, err error) {
-	rows, err := db.Query("select `id`,`username`,`money_source`,`remark`,`money` from `logs` where `username`=?", username)
+func GetLogs(username string, search string) (logs []Log, err error) {
+	var rows *sql.Rows
+	if search == "" {
+		rows, err = db.Query("select `id`,`username`,`money_source`,`remark`,`money` from `logs` "+
+			"where `username`=?", username)
+	} else {
+		rows, err = db.Query("select `id`,`username`,`money_source`,`remark`,`money` from `logs` " +
+			"where `username`=\"" + username + "\" and `remark` like \"%" + search + "%\"")
+	}
+
 	if err != nil {
 		return logs, err
 	}

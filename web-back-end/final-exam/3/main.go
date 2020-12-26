@@ -8,6 +8,7 @@ import "card/controller"
 
 func main() {
 	var router = gin.Default()
+	router.GET("/", controller.Help())
 	router.GET("/register", controller.Register())
 	router.GET("/login", controller.Login())
 	router.GET("/charge", controller.Charge())

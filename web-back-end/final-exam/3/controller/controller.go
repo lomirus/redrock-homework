@@ -226,8 +226,8 @@ func Logs() gin.HandlerFunc {
 			})
 			return
 		}
-
-		logs, err := model.GetLogs(username)
+		search := c.Query("search")
+		logs, err := model.GetLogs(username, search)
 		if err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"error": err.Error(),
@@ -244,7 +244,9 @@ func Help() gin.HandlerFunc {
 			"登录":   "/login",
 			"充值":   "/charge",
 			"转账":   "/transfer",
-			"查询记录": "/getLogs",
+			"转账备注": "/transfer?remark",
+			"查询记录": "/logs",
+			"模糊查询": "/logs?search",
 			"帮助":   "/help",
 		})
 	}
