@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>asd</title>
+    <script src="/statics/js/qrcode.min.js"></script>
+</head>
+<body>
+    <div>
+        <a href={{.href}}>点我转账</a>
+        <div id="qrcode"></div>
+    </div>
+    <script>
+        const prefix = window.location.protocol + "://" + window.location.host
+        new QRCode(document.querySelector("#qrcode"), prefix + {{.href}});
+    </script>
+    </script>
+</body>
+</html>

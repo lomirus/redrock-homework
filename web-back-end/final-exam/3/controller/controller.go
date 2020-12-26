@@ -240,14 +240,26 @@ func Logs() gin.HandlerFunc {
 func Help() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
-			"注册":   "/register",
-			"登录":   "/login",
-			"充值":   "/charge",
-			"转账":   "/transfer",
-			"转账备注": "/transfer?remark",
-			"查询记录": "/logs",
-			"模糊查询": "/logs?search",
-			"帮助":   "/help",
+			"注册":    "/register",
+			"登录":    "/login",
+			"充值":    "/charge",
+			"转账":    "/transfer",
+			"转账备注":  "/transfer?remark",
+			"查询记录":  "/logs",
+			"模糊查询":  "/logs?search",
+			"转账链接":  "/qrcode/transfer",
+			"转账二维码": "/qrcode/transfer",
+			"帮助":    "/help",
+		})
+	}
+}
+func QrCodeTransfer() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		target := c.Query("target")
+		money := c.Query("money")
+		remark := c.Query("remark")
+		c.HTML(http.StatusOK, "qrcode.html", gin.H{
+			"href": "/transfer/?target=" + target + "&money=" + money + "&remark=" + remark,
 		})
 	}
 }
