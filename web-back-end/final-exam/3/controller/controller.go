@@ -150,7 +150,13 @@ func Transfer() gin.HandlerFunc {
 			})
 			return
 		}
-		targetUsername := c.Query("targetUsername")
+		targetUsername := c.Query("target")
+		if targetUsername == "" {
+			c.JSON(http.StatusOK, gin.H{
+				"error": "invalid target",
+			})
+			return
+		}
 		money, err := strconv.Atoi(c.Query("money"))
 		if err != nil {
 			c.JSON(http.StatusOK, gin.H{
@@ -166,7 +172,25 @@ func Transfer() gin.HandlerFunc {
 		}
 		remark := c.Query("remark")
 		self, err := model.GetUser(username)
+		if err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"error": "cannot find your username",
+			})
+			return
+		}
 		target, err := model.GetUser(targetUsername)
+		if err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"error": "cannot find the target",
+			})
+			return
+		}
+		if self.Money < money {
+			c.JSON(http.StatusOK, gin.H{
+				"error": "your money is not enough",
+			})
+			return
+		}
 		err = model.Transfer(self, target, money, remark)
 		if err != nil {
 			c.JSON(http.StatusOK, gin.H{
@@ -179,7 +203,7 @@ func Transfer() gin.HandlerFunc {
 		}
 	}
 }
-func GetLogs() gin.HandlerFunc {
+func Logs() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		username, err := c.Cookie("username")
 		if err != nil {

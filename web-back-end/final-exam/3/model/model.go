@@ -124,7 +124,7 @@ func GetLogs(username string) (logs []Log, err error) {
 	if err != nil {
 		return logs, err
 	}
-	if rows.Next() {
+	for rows.Next() {
 		var log Log
 		err = rows.Scan(&log.Id, &log.Username, &log.MoneySource, &log.Remark, &log.Money)
 		if err != nil {
