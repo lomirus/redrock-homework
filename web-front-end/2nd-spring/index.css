@@ -1,0 +1,21 @@
+.ball {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    transition: all linear 1s;
+}
+
+#ball1 {
+    background-color: aqua;
+    transform: translateX(0);
+}
+
+#ball2 {
+    background-color: darkorange;
+    transform: translateX(0);
+}
+
+#ball3 {
+    background-color: slategrey;
+    transform: translateX(0);
+}

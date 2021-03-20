@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Async ball</title>
+    <link rel="stylesheet" href="index.css" type="text/css" />
+</head>
+
+<body>
+    <div>
+        <div class="ball" id="ball1"></div>
+        <div class="ball" id="ball2"></div>
+        <div class="ball" id="ball3"></div>
+    </div>
+    <div>
+        <button onclick="moveCallback()">Callback</button>
+        <button onclick="movePromise()">Promise</button>
+        <button onclick="moveAsync()">Async/Await</button>
+        <button onclick="window.location.reload()">REFRESH</button>
+    </div>
+    <script src="./index.js"></script>
+</body>
+
+</html>
