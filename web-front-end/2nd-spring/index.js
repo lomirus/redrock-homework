@@ -1,7 +1,11 @@
 const balls = document.querySelectorAll('.ball')
 const moveBall = id => balls[id].style.transform = 'translateX(100px)'
+const newMovePromise = id => new Promise(resolve => {
+    moveBall(id)
+    setTimeout(resolve, 1000)
+})
 
-function moveCallback(ball, target, cb) {
+function moveCallback() {
     moveBall(0)
     setTimeout(() => {
         moveBall(1)
@@ -9,24 +13,14 @@ function moveCallback(ball, target, cb) {
     }, 1000)
 }
 
-function movePromise(ball, target) {
-    new Promise(resolve => {
-        moveBall(0)
-        setTimeout(resolve, 1000)
-    }).then(() => new Promise(resolve => {
-        moveBall(1)
-        setTimeout(resolve, 1000)
-    })).then(() => {
-        moveBall(2)
-    })
+function movePromise() {
+    newMovePromise(0)
+        .then(() => newMovePromise(1))
+        .then(() => moveBall(2))
 }
 
 async function moveAsync() {
-    const thisMovePromise = (i) => new Promise(resolve => {
-        moveBall(i)
-        setTimeout(resolve, 1000)
-    })
-    await thisMovePromise(0)
-    await thisMovePromise(1)
-    await thisMovePromise(2)
+    await newMovePromise(0)
+    await newMovePromise(1)
+    await newMovePromise(2)
 }
