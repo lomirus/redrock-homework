@@ -1,13 +1,13 @@
 const { exec } = require('child_process')
 const fs = require('fs').promises
 
-class TestPlugin {
+class ChangeLogPlugin {
     constructor(options = {}) {
         this.target = options.target ? options.target : 'README.md'
     }
     apply(compiler) {
-        compiler.hooks.emit.tapAsync('TestPlugin', async (compilation, callback) => {
-            exec('git commit', async (err, stdout, stderr) => {
+        compiler.hooks.emit.tapAsync('ChangeLogPlugin', async (compilation, callback) => {
+            exec('git log', async (err, stdout, stderr) => {
                 fs.writeFile(this.target, stdout)
                 callback()
             })
@@ -15,4 +15,4 @@ class TestPlugin {
     }
 }
 
-module.exports = TestPlugin
+module.exports = ChangeLogPlugin

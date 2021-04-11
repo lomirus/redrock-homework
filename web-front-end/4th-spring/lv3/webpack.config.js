@@ -1,6 +1,6 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const TestPlugin = require('./plugins/plugin.js')
+const ChangeLogPlugin = require('./plugins/plugin.js')
 
 module.exports = {
     mode: "development",
@@ -9,9 +9,7 @@ module.exports = {
         path : path.resolve('dist'),
         filename: 'bundle.js'
     },
-    plugins: [ new HtmlWebpackPlugin(), new TestPlugin({
-        test: "asd"
-    })],
+    plugins: [ new HtmlWebpackPlugin(), new ChangeLogPlugin()],
     devServer: {
         contentBase: path.resolve('dist'),
         open: true
